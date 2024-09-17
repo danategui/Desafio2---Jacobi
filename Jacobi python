@@ -1,0 +1,49 @@
+import numpy as np
+
+A = np.array([[52, 20, 25],
+              [30, 50, 20],
+              [18, 30, 55]])
+
+b = np.array([4800, 5810, 5690])
+
+A_inv = np.linalg.inv(A)
+
+X = np.dot(A_inv, b)
+
+M = np.array([[0.0, -1*(A[0,1]/A[0,0]), -1*(A[0,2]/A[0,0])],
+              [-1*(A[1,0]/A[1,1]), 0.0, -1*(A[1,2]/A[1,1])],
+              [-1*(A[2,0]/A[2,2]), -1*(A[2,1]/A[2,2]), 0.0]])
+
+c = np.array([b[0]/A[0,0], b[1]/A[1,1], b[2]/A[2,2]])
+
+alfa_1 = abs(M[0,1])+abs(M[0,2])
+alfa_2 = abs(M[1,0])+abs(M[1,2])
+alfa_3 = abs(M[2,0])+abs(M[2,1])
+
+max_alfa = max(alfa_1, alfa_2, alfa_3)
+
+x_1 = x_2 = x_3 = 0
+max_iter = 1000
+tol = 0.0005
+max_ei = 10000
+for i in range(max_iter + 1):
+  if (max_ei > tol):
+    if (i != 0):
+      x_1_next = (M[0,1]*x_2) + (M[0,2]*x_3) + c[0]
+      x_2_next = (M[1,0]*x_1) + (M[1,2]*x_3) + c[1]
+      x_3_next = (M[2,0]*x_1) + (M[2,1]*x_2) + c[2]
+      e_1 = abs(x_1_next - x_1)
+      e_2 = abs(x_2_next - x_2)
+      e_3 = abs(x_3_next - x_3)
+      max_ei = max(e_1, e_2, e_3)
+    else:
+      x_1_next = (M[0,1]*x_2) + (M[0,2]*x_3) + c[0]
+      x_2_next = (M[1,0]*x_1) + (M[1,2]*x_3) + c[1]
+      x_3_next = (M[2,0]*x_1) + (M[2,1]*x_2) + c[2]
+  x_1 = x_1_next
+  x_2 = x_2_next
+  x_3 = x_3_next
+
+print(x_1)
+print(x_2)
+print(x_3)
